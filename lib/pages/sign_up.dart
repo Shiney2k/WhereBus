@@ -1,4 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+import '../auth/secrets.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key, required String title}) : super(key: key);
@@ -28,6 +33,31 @@ class _SignUpState extends State<SignUp> {
     passwordController2.dispose();
     phoneController.dispose();
     super.dispose();
+  }
+
+  var url = Uri.parse(
+      'https://data.mongodb-api.com/app/data-pgjxy/endpoint/data/v1/action/insertOne');
+
+  Future<http.Response> submitNewUser(String fname, String lname, String email,
+      String password, String phone, String accType) async {
+    return http.post(url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'api-key': MONGODB_API_KEY
+        },
+        body: jsonEncode(<String, dynamic>{
+          'dataSource': 'cluster0',
+          'database': 'WhereBus',
+          'collection': 'users',
+          'document': {
+            'fname': fname,
+            'lname': lname,
+            'email': email,
+            'password': password,
+            'phone': phone,
+            'acctype': accType
+          }
+        }));
   }
 
   @override
@@ -242,20 +272,28 @@ class _SignUpState extends State<SignUp> {
                           if (formKey.currentState!.validate()) {
                             if (passwordController1.text ==
                                 passwordController2.text) {
-
+                              var response = submitNewUser(
+                                  firstNameController.text,
+                                  lastNameController.text,
+                                  emailController.text,
+                                  passwordController1.text,
+                                  phoneController.text,
+                                  dropdownValue);
                             } else {
                               showDialog<void>(
                                 context: context,
-                                barrierDismissible:
-                                    false,
+                                barrierDismissible: false,
                                 builder: (BuildContext context) {
                                   return AlertDialog(
                                     title: const Text('Password incorrect'),
                                     content: SingleChildScrollView(
                                       child: ListBody(
                                         children: const <Widget>[
-                                          Text('Password and repeat password do not match.'),
-                                          SizedBox(height: 5,),
+                                          Text(
+                                              'Password and repeat password do not match.'),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
                                           Text(
                                               'Please enter repeat password again'),
                                         ],
