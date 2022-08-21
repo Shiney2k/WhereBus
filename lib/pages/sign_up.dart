@@ -8,6 +8,8 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  final formKey = GlobalKey<FormState>();
+
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
   final emailController = TextEditingController();
@@ -34,12 +36,14 @@ class _SignUpState extends State<SignUp> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
+            child: Form(
+          key: formKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: height * 0.08,
+                height: height * 0.10,
               ),
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 0, horizontal: 36),
@@ -49,14 +53,14 @@ class _SignUpState extends State<SignUp> {
                 ),
               ),
               SizedBox(
-                height: height * 0.02,
+                height: height * 0.04,
               ),
               Center(
                   child: SizedBox(
                       width: 300,
                       child: Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 16),
+                              horizontal: 8, vertical: 8),
                           child: TextFormField(
                             decoration: const InputDecoration(
                               border: UnderlineInputBorder(),
@@ -78,7 +82,7 @@ class _SignUpState extends State<SignUp> {
                       width: 300,
                       child: Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 16),
+                              horizontal: 8, vertical: 8),
                           child: TextFormField(
                             decoration: const InputDecoration(
                               border: UnderlineInputBorder(),
@@ -100,7 +104,7 @@ class _SignUpState extends State<SignUp> {
                       width: 300,
                       child: Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 16),
+                              horizontal: 8, vertical: 8),
                           child: TextFormField(
                             decoration: const InputDecoration(
                               border: UnderlineInputBorder(),
@@ -122,7 +126,7 @@ class _SignUpState extends State<SignUp> {
                       width: 300,
                       child: Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 16),
+                              horizontal: 8, vertical: 8),
                           child: TextFormField(
                             obscureText: true,
                             decoration: const InputDecoration(
@@ -143,7 +147,7 @@ class _SignUpState extends State<SignUp> {
                       width: 300,
                       child: Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 16),
+                              horizontal: 8, vertical: 8),
                           child: TextFormField(
                             obscureText: true,
                             decoration: const InputDecoration(
@@ -164,7 +168,7 @@ class _SignUpState extends State<SignUp> {
                       width: 300,
                       child: Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 16),
+                              horizontal: 8, vertical: 8),
                           child: TextFormField(
                             decoration: const InputDecoration(
                               border: UnderlineInputBorder(),
@@ -186,13 +190,14 @@ class _SignUpState extends State<SignUp> {
                     width: 300,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                          vertical: 16, horizontal: 8),
+                          vertical: 8, horizontal: 8),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text("Account type",
+                          const Text(
+                            "Account type",
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 16,
                               color: Color.fromARGB(255, 83, 83, 83),
                             ),
                           ),
@@ -214,10 +219,32 @@ class _SignUpState extends State<SignUp> {
                         ],
                       ),
                     )),
-              )
+              ),
+              SizedBox(
+                height: height * 0.06,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 40),
+                      child: TextButton(
+                          onPressed: () {}, child: const Text("Cancel"))),
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 40),
+                    child: ElevatedButton(
+                        onPressed: () {
+                          if (formKey.currentState!.validate()) {}
+                        },
+                        child: const Text("Create account")),
+                  )
+                ],
+              ),
             ],
           ),
-        ),
+        )),
       ),
     );
   }
