@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wherebus/pages/sign_in.dart';
 import 'package:wherebus/pages/sign_up.dart';
 
 void main() {
@@ -11,10 +12,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'WhereBus',
-      home: SignUp()
+      home: const SignIn(),
+      routes: <String, WidgetBuilder> {
+      '/SignUp': (BuildContext context) => const SignUp(title: 'SignUp'),
+    },
     );
   }
 }

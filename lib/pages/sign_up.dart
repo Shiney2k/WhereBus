@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SignUp extends StatefulWidget {
-  const SignUp({Key? key}) : super(key: key);
+  const SignUp({Key? key, required String title}) : super(key: key);
 
   @override
   State<SignUp> createState() => _SignUpState();
@@ -230,7 +230,9 @@ class _SignUpState extends State<SignUp> {
                       padding: const EdgeInsets.symmetric(
                           vertical: 8, horizontal: 40),
                       child: TextButton(
-                          onPressed: () {}, child: const Text("Cancel"))),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          }, child: const Text("Cancel"))),
                   Padding(
                     padding:
                         const EdgeInsets.symmetric(vertical: 8, horizontal: 40),

@@ -125,16 +125,16 @@ class _SignInState extends State<SignIn> {
                             padding: const EdgeInsets.symmetric(
                                 vertical: 8, horizontal: 40),
                             child: TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.pushNamed(context, '/SignUp');
+                                },
                                 child: const Text("Create account"))),
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 8, horizontal: 40),
                           child: ElevatedButton(
                               onPressed: () {
-                                if (formKey.currentState!.validate()) {
-
-                                }
+                                if (formKey.currentState!.validate()) {}
                               },
                               child: const Text("Sign in")),
                         )
