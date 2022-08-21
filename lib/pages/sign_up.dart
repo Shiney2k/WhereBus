@@ -68,7 +68,7 @@ class _SignUpState extends State<SignUp> {
                             ),
                             validator: (value) {
                               if (value!.isEmpty ||
-                                  !RegExp(r"^[a-z A-Z]{2,}\s[a-z A-Z]{2,}'?-?[a-z A-Z]{2,}\s?[a-z A-Z]{1,}")
+                                  !RegExp(r"^[a-z A-Z]{2,}\s?[a-z A-Z]{2,}?'?-?[a-z A-Z]{2,}?\s?[a-z A-Z]{1,}?")
                                       .hasMatch(value)) {
                                 return "Please enter valid name";
                               } else {
@@ -90,7 +90,7 @@ class _SignUpState extends State<SignUp> {
                             ),
                             validator: (value) {
                               if (value!.isEmpty ||
-                                  !RegExp(r"^[a-z A-Z]{2,}\s[a-z A-Z]{2,}'?-?[a-z A-Z]{2,}\s?[a-z A-Z]{1,}")
+                                  !RegExp(r"^[a-z A-Z]{2,}\s?[a-z A-Z]{2,}?'?-?[a-z A-Z]{2,}?\s?[a-z A-Z]{1,}?")
                                       .hasMatch(value)) {
                                 return "Please enter valid name";
                               } else {
@@ -232,13 +232,48 @@ class _SignUpState extends State<SignUp> {
                       child: TextButton(
                           onPressed: () {
                             Navigator.pop(context);
-                          }, child: const Text("Cancel"))),
+                          },
+                          child: const Text("Cancel"))),
                   Padding(
                     padding:
                         const EdgeInsets.symmetric(vertical: 8, horizontal: 40),
                     child: ElevatedButton(
                         onPressed: () {
-                          if (formKey.currentState!.validate()) {}
+                          if (formKey.currentState!.validate()) {
+                            if (passwordController1.text ==
+                                passwordController2.text) {
+
+                            } else {
+                              showDialog<void>(
+                                context: context,
+                                barrierDismissible:
+                                    false,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text('Password incorrect'),
+                                    content: SingleChildScrollView(
+                                      child: ListBody(
+                                        children: const <Widget>[
+                                          Text('Password and repeat password do not match.'),
+                                          SizedBox(height: 5,),
+                                          Text(
+                                              'Please enter repeat password again'),
+                                        ],
+                                      ),
+                                    ),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: const Text('Ok'),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            }
+                          }
                         },
                         child: const Text("Create account")),
                   )
