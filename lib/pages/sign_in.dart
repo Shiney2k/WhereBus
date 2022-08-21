@@ -11,6 +11,16 @@ class _SignInState extends State<SignIn> {
   final formKey = GlobalKey<FormState>();
   String name = "";
 
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
@@ -82,6 +92,7 @@ class _SignInState extends State<SignIn> {
                                       return null;
                                     }
                                   },
+                                  controller: emailController,
                                 )))),
                     Center(
                         child: SizedBox(
@@ -102,6 +113,7 @@ class _SignInState extends State<SignIn> {
                                       return null;
                                     }
                                   },
+                                  controller: passwordController,
                                 )))),
                     SizedBox(
                       height: height * 0.10,
@@ -121,10 +133,7 @@ class _SignInState extends State<SignIn> {
                           child: ElevatedButton(
                               onPressed: () {
                                 if (formKey.currentState!.validate()) {
-                                  const snackBar = SnackBar(
-                                      content: Text("Signed in successfully"));
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(snackBar);
+
                                 }
                               },
                               child: const Text("Sign in")),
@@ -137,15 +146,18 @@ class _SignInState extends State<SignIn> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text("Forgot your password?",
-                        style: TextStyle(
-                          fontSize: 12
+                        const Text(
+                          "Forgot your password?",
+                          style: TextStyle(fontSize: 12),
                         ),
-                        ),
-                        TextButton(onPressed: (){}, child: const Text("recover password",
-                        style: TextStyle(fontSize: 12),
-                        ))
-                    ],)
+                        TextButton(
+                            onPressed: () {},
+                            child: const Text(
+                              "recover password",
+                              style: TextStyle(fontSize: 12),
+                            ))
+                      ],
+                    )
                   ],
                 )),
           ),
