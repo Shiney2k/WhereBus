@@ -176,7 +176,7 @@ class _SignUpState extends State<SignUp> {
                             ),
                             validator: (value) {
                               if (value!.isEmpty ||
-                                  !RegExp(r"^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$")
+                                  !RegExp(r"^(\+\d{1,2}\s?)?\(?\d{2}\)?[\s.-]?\d{3}[\s.-]?\d{4}$")
                                       .hasMatch(value)) {
                                 return "Please enter valid phone number";
                               } else {
