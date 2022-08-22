@@ -1,7 +1,7 @@
 # WhereBus
  WhereBus - Book seats and track live location of public transport buses
  
- Note:
+# Note
 	- Inside the /lib/ folder, create a folder named 'auth'.
 	- Inside /lib/auth folder, create a dart file named 'secrets.dart'
 	- In the secrets.dart file, add these lines.
