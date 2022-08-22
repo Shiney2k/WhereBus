@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+// import 'package:http/http.dart' as http;
 import 'package:wherebus/tools/post_user_json_model.dart';
 
 import '../auth/secrets.dart';
@@ -86,10 +86,8 @@ class _SignUpState extends State<SignUp> {
     })));
     HttpClientResponse response = await request.close();
     String reply = await response.transform(utf8.decoder).join();
-    //var jsonReply = json.decode(reply);
+    // var jsonReply = json.decode(reply);
     httpClient.close();
-
-    print(reply);
 
     if (response.statusCode == 201) {
       return postUserJsonModelFromJson(reply);
