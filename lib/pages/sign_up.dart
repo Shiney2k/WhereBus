@@ -126,6 +126,7 @@ class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -364,6 +365,7 @@ class _SignUpState extends State<SignUp> {
                                           child: const Text('Ok'),
                                           onPressed: () {
                                             Navigator.of(context).pop();
+                                            Navigator.pop(context);
                                           },
                                         ),
                                       ],
