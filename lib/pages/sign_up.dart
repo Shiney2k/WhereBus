@@ -45,7 +45,7 @@ class _SignUpState extends State<SignUp> {
     // This post method does not work because
     // http.post method parses keys and values to all lowercase letters
     // this confuses the MongoDB Atlas server to not recognize the 'Content-Type' header
-    // HttpClientRequest is used to fix this issue
+    // HttpClientRequest is used instead to fix this issue
 
     // var response = await http.post(url,
     //     headers: <String, String>{
