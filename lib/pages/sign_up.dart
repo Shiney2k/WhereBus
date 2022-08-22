@@ -37,8 +37,8 @@ class _SignUpState extends State<SignUp> {
     super.dispose();
   }
 
-  var url = Uri.parse(
-      'https://data.mongodb-api.com/app/data-pgjxy/endpoint/data/v1/action/insertOne');
+  var url = Uri.parse(MONGODB_URL_BASE +
+      'action/insertOne');
 
   Future<PostUserJsonModel> submitNewUser(String fname, String lname,
       String email, String password, String phone, String accType) async {
