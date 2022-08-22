@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:wherebus/tools/post_user_json_model.dart';
 
 import '../auth/secrets.dart';
 
@@ -38,26 +40,62 @@ class _SignUpState extends State<SignUp> {
   var url = Uri.parse(
       'https://data.mongodb-api.com/app/data-pgjxy/endpoint/data/v1/action/insertOne');
 
-  Future<http.Response> submitNewUser(String fname, String lname, String email,
-      String password, String phone, String accType) async {
-    return http.post(url,
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-          'api-key': MONGODB_API_KEY
-        },
-        body: jsonEncode(<String, dynamic>{
-          'dataSource': 'Cluster0',
-          'database': 'WhereBus',
-          'collection': 'users',
-          'document': {
-            'fname': fname,
-            'lname': lname,
-            'email': email,
-            'password': password,
-            'phone': phone,
-            'acctype': accType
-          }
-        }));
+  Future<PostUserJsonModel> submitNewUser(String fname, String lname,
+      String email, String password, String phone, String accType) async {
+
+    // This post method does not work because
+    // http.post method parses keys and values to all lowercase letters
+    // this confuses the MongoDB Atlas server to not recognize the 'Content-Type' header
+    // HttpClientRequest is used to fix this issue
+
+    // var response = await http.post(url,
+    //     headers: <String, String>{
+    //       'content-type': 'application/json',
+    //       'api-key': MONGODB_API_KEY
+    //     },
+    // body: jsonEncode(<String, dynamic>{
+    //   'dataSource': 'Cluster0',
+    //   'database': 'WhereBus',
+    //   'collection': 'users',
+    //   'document': {
+    //     'fname': fname,
+    //     'lname': lname,
+    //     'email': email,
+    //     'password': password,
+    //     'phone': phone,
+    //     'acctype': accType
+    //   }
+    // }));
+
+    HttpClient httpClient = HttpClient();
+    HttpClientRequest request = await httpClient.postUrl(url);
+    request.headers.set('Content-Type', 'application/json');
+    request.headers.set('api-key', MONGODB_API_KEY);
+    request.add(utf8.encode(json.encode({
+      'dataSource': 'Cluster0',
+      'database': 'WhereBus',
+      'collection': 'users',
+      'document': {
+        'fname': fname,
+        'lname': lname,
+        'email': email,
+        'password': password,
+        'phone': phone,
+        'acctype': accType
+      }
+    })));
+    HttpClientResponse response = await request.close();
+    String reply = await response.transform(utf8.decoder).join();
+    //var jsonReply = json.decode(reply);
+    httpClient.close();
+
+    print(reply);
+
+    if (response.statusCode == 201) {
+      return postUserJsonModelFromJson(reply);
+    } else {
+      return postUserJsonModelFromJson('Error');
+    }
   }
 
   @override
@@ -268,17 +306,73 @@ class _SignUpState extends State<SignUp> {
                     padding:
                         const EdgeInsets.symmetric(vertical: 8, horizontal: 40),
                     child: ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           if (formKey.currentState!.validate()) {
                             if (passwordController1.text ==
                                 passwordController2.text) {
-                              var response = submitNewUser(
+                              PostUserJsonModel data = await submitNewUser(
                                   firstNameController.text,
                                   lastNameController.text,
                                   emailController.text,
                                   passwordController1.text,
                                   phoneController.text,
                                   dropdownValue);
+
+                              if (data.insertedId == 'Error') {
+                                showDialog<void>(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: const Text('Error!'),
+                                      content: SingleChildScrollView(
+                                        child: ListBody(
+                                          children: const <Widget>[
+                                            Text('Could not create account'),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text('Please try again later'),
+                                          ],
+                                        ),
+                                      ),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          child: const Text('Ok'),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              } else {
+                                showDialog<void>(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: const Text('Account created successfully'),
+                                      content: SingleChildScrollView(
+                                        child: ListBody(
+                                          children: const <Widget>[
+                                            Text('You can now sign in to the app using this account'),
+                                          ],
+                                        ),
+                                      ),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          child: const Text('Ok'),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              }
                             } else {
                               showDialog<void>(
                                 context: context,
