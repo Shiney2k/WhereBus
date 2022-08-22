@@ -1,4 +1,10 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:wherebus/tools/get_user_json_model.dart';
+
+import '../auth/secrets.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
@@ -19,6 +25,62 @@ class _SignInState extends State<SignIn> {
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
+  }
+
+  var url = Uri.parse(MONGODB_URL_BASE + 'action/findOne');
+
+  Future<GetUserJsonModel> getUser(String email) async {
+    HttpClient httpClient = HttpClient();
+    HttpClientRequest request = await httpClient.postUrl(url);
+    request.headers.set('Content-Type', 'application/json');
+    request.headers.set('api-key', MONGODB_API_KEY);
+    request.add(utf8.encode(json.encode({
+      'dataSource': 'Cluster0',
+      'database': 'WhereBus',
+      'collection': 'users',
+      'filter': {"email": email}
+    })));
+    HttpClientResponse response = await request.close();
+    String reply = await response.transform(utf8.decoder).join();
+    // print(reply);
+    // var jsonReply = json.decode(reply);
+    httpClient.close();
+
+    if (response.statusCode == 200) {
+      return getUserJsonModelFromJson(reply);
+    } else {
+      showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Error ${response.statusCode}'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: const <Widget>[
+                  Text('Could not sign in'),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Text('Please try again later'),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Ok'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+      return getUserJsonModelFromJson(json.encode(<String, dynamic>{
+        'document': {'_id': 'Error'}
+      }));
+    }
   }
 
   @override
@@ -133,8 +195,102 @@ class _SignInState extends State<SignIn> {
                           padding: const EdgeInsets.symmetric(
                               vertical: 8, horizontal: 40),
                           child: ElevatedButton(
-                              onPressed: () {
-                                if (formKey.currentState!.validate()) {}
+                              onPressed: () async {
+                                if (formKey.currentState!.validate()) {
+                                  GetUserJsonModel data =
+                                      await getUser(emailController.text);
+                                  if (data.document.id != 'Error' ||
+                                      data.document.id != 'Empty') {
+                                    if (data.document.email ==
+                                        emailController.text) {
+                                      if (data.document.password ==
+                                          passwordController.text) {
+                                        print('Sign in success!');
+                                      } else {
+                                        showDialog<void>(
+                                          context: context,
+                                          barrierDismissible: false,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: const Text(
+                                                  'Incorrect password'),
+                                              content: SingleChildScrollView(
+                                                child: ListBody(
+                                                  children: const <Widget>[
+                                                    Text(
+                                                        'Please enter correct password'),
+                                                  ],
+                                                ),
+                                              ),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                  child: const Text('Ok'),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      }
+                                    } else {
+                                      showDialog<void>(
+                                        context: context,
+                                        barrierDismissible: false,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title:
+                                                const Text('Incorrect email'),
+                                            content: SingleChildScrollView(
+                                              child: ListBody(
+                                                children: const <Widget>[
+                                                  Text(
+                                                      'Please enter correct email'),
+                                                ],
+                                              ),
+                                            ),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                child: const Text('Ok'),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    }
+                                  } else if (data.document.id == 'Empty') {
+                                    showDialog<void>(
+                                      context: context,
+                                      barrierDismissible: false,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title:
+                                              const Text('Account not found'),
+                                          content: SingleChildScrollView(
+                                            child: ListBody(
+                                              children: const <Widget>[
+                                                Text(
+                                                    'Please enter valid email'),
+                                              ],
+                                            ),
+                                          ),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              child: const Text('Ok'),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  }
+                                }
                               },
                               child: const Text("Sign in")),
                         )
