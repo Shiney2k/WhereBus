@@ -46,7 +46,7 @@ class _SignUpState extends State<SignUp> {
           'api-key': MONGODB_API_KEY
         },
         body: jsonEncode(<String, dynamic>{
-          'dataSource': 'cluster0',
+          'dataSource': 'Cluster0',
           'database': 'WhereBus',
           'collection': 'users',
           'document': {
