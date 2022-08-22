@@ -42,7 +42,6 @@ class _SignUpState extends State<SignUp> {
 
   Future<PostUserJsonModel> submitNewUser(String fname, String lname,
       String email, String password, String phone, String accType) async {
-
     // This post method does not work because
     // http.post method parses keys and values to all lowercase letters
     // this confuses the MongoDB Atlas server to not recognize the 'Content-Type' header
@@ -92,6 +91,34 @@ class _SignUpState extends State<SignUp> {
     if (response.statusCode == 201) {
       return postUserJsonModelFromJson(reply);
     } else {
+      showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Error ${response.statusCode}'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: const <Widget>[
+                  Text('Could not create account'),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Text('Please try again later'),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Ok'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
       return postUserJsonModelFromJson('Error');
     }
   }
@@ -316,46 +343,19 @@ class _SignUpState extends State<SignUp> {
                                   phoneController.text,
                                   dropdownValue);
 
-                              if (data.insertedId == 'Error') {
+                              if (data.insertedId != 'Error') {
                                 showDialog<void>(
                                   context: context,
                                   barrierDismissible: false,
                                   builder: (BuildContext context) {
                                     return AlertDialog(
-                                      title: const Text('Error!'),
+                                      title: const Text(
+                                          'Account created successfully'),
                                       content: SingleChildScrollView(
                                         child: ListBody(
                                           children: const <Widget>[
-                                            Text('Could not create account'),
-                                            SizedBox(
-                                              height: 5,
-                                            ),
-                                            Text('Please try again later'),
-                                          ],
-                                        ),
-                                      ),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          child: const Text('Ok'),
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              } else {
-                                showDialog<void>(
-                                  context: context,
-                                  barrierDismissible: false,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: const Text('Account created successfully'),
-                                      content: SingleChildScrollView(
-                                        child: ListBody(
-                                          children: const <Widget>[
-                                            Text('You can now sign in to the app using this account'),
+                                            Text(
+                                                'You can now sign in to the app using this account'),
                                           ],
                                         ),
                                       ),
