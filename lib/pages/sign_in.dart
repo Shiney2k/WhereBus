@@ -207,6 +207,8 @@ class _SignInState extends State<SignIn> {
                                         emailController.text) {
                                       if (data.document.password ==
                                           passwordController.text) {
+                                            emailController.text = '';
+                                            passwordController.text = '';
                                         if(data.document.acctype == 'Passenger') {
 
                                         } else if (data.document.acctype == 'Owner') {
