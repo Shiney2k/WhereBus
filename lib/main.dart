@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wherebus/pages/sign_in.dart';
+import 'package:wherebus/pages/owner.dart';
+// import 'package:wherebus/pages/sign_in.dart';
 import 'package:wherebus/pages/sign_up.dart';
 
 void main() {
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'WhereBus',
-      home: const SignIn(),
+      home: const Owner(),
       routes: <String, WidgetBuilder> {
       '/SignUp': (BuildContext context) => const SignUp(title: 'SignUp'),
     },
