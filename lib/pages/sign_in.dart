@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:wherebus/pages/owner.dart';
 import 'package:wherebus/tools/get_user_json_model.dart';
 
 import '../auth/secrets.dart';
@@ -196,6 +197,7 @@ class _SignInState extends State<SignIn> {
                               vertical: 8, horizontal: 40),
                           child: ElevatedButton(
                               onPressed: () async {
+                                final navigator = Navigator.of(context);
                                 if (formKey.currentState!.validate()) {
                                   GetUserJsonModel data =
                                       await getUser(emailController.text);
@@ -205,7 +207,12 @@ class _SignInState extends State<SignIn> {
                                         emailController.text) {
                                       if (data.document.password ==
                                           passwordController.text) {
-                                        print('Sign in success!');
+                                        if(data.document.acctype == 'Passenger') {
+
+                                        } else if (data.document.acctype == 'Owner') {
+                                          var ownerPage = Owner(data: data);
+                                          navigator.push(MaterialPageRoute(builder: (context) => ownerPage));
+                                        }
                                       } else {
                                         showDialog<void>(
                                           context: context,

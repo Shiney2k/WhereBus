@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:wherebus/tools/get_user_json_model.dart';
 
 class Owner extends StatefulWidget {
-  const Owner({Key? key}) : super(key: key);
+  const Owner({Key? key, required this.data}) : super(key: key);
+  final GetUserJsonModel data;
 
   @override
   State<Owner> createState() => _OwnerState();
@@ -22,11 +24,11 @@ class _OwnerState extends State<Owner> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 0, horizontal: 36),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 36),
                   child: Text(
-                    "Owner",
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+                    widget.data.document.fname!,
+                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
                   ),
                 ),
                 Padding(
