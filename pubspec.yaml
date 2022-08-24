@@ -30,6 +30,7 @@ dependencies:
   flutter:
     sdk: flutter
   http: ^0.13.5
+  get: ^4.6.5
   dots_indicator: ^2.1.0
 
 
