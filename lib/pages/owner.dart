@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wherebus/pages/add_new_bus.dart';
 import 'package:wherebus/tools/get_user_json_model.dart';
+import 'package:wherebus/widgets/bus_item_cards.dart';
 
 class Owner extends StatefulWidget {
   const Owner({Key? key, required this.data}) : super(key: key);
@@ -43,7 +44,9 @@ class _OwnerState extends State<Owner> {
                         }, child: const Text('Sign out')),
                   )
                 ],
-              )
+              ),
+              const SizedBox(height: 16,),
+              const BusItemCards()
             ],
           ),
         ),
