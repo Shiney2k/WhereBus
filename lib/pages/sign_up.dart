@@ -17,6 +17,8 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   final formKey = GlobalKey<FormState>();
 
+  bool isLoading = false;
+
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
   final emailController = TextEditingController();
@@ -332,80 +334,92 @@ class _SignUpState extends State<SignUp> {
                   child: const Text("Cancel"))),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 40),
-            child: ElevatedButton(
-                onPressed: () async {
-                  if (formKey.currentState!.validate()) {
-                    if (passwordController1.text == passwordController2.text) {
-                      PostUserJsonModel data = await submitNewUser(
-                          firstNameController.text,
-                          lastNameController.text,
-                          emailController.text,
-                          passwordController1.text,
-                          phoneController.text,
-                          dropdownValue);
+            child: isLoading
+                ? const CircularProgressIndicator()
+                : ElevatedButton(
+                    onPressed: () async {
+                      setState(() {
+                        isLoading = true;
+                      });
 
-                      if (data.insertedId != 'Error') {
-                        showDialog<void>(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text('Account created successfully'),
-                              content: SingleChildScrollView(
-                                child: ListBody(
-                                  children: const <Widget>[
-                                    Text(
-                                        'You can now sign in to the app using this account'),
-                                  ],
-                                ),
-                              ),
-                              actions: <Widget>[
-                                TextButton(
-                                  child: const Text('Ok'),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      }
-                    } else {
-                      showDialog<void>(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('Password incorrect'),
-                            content: SingleChildScrollView(
-                              child: ListBody(
-                                children: const <Widget>[
-                                  Text(
-                                      'Password and repeat password do not match.'),
-                                  SizedBox(
-                                    height: 5,
+                      if (formKey.currentState!.validate()) {
+                        if (passwordController1.text ==
+                            passwordController2.text) {
+                          PostUserJsonModel data = await submitNewUser(
+                              firstNameController.text,
+                              lastNameController.text,
+                              emailController.text,
+                              passwordController1.text,
+                              phoneController.text,
+                              dropdownValue);
+
+                          if (data.insertedId != 'Error') {
+                            showDialog<void>(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text(
+                                      'Account created successfully'),
+                                  content: SingleChildScrollView(
+                                    child: ListBody(
+                                      children: const <Widget>[
+                                        Text(
+                                            'You can now sign in to the app using this account'),
+                                      ],
+                                    ),
                                   ),
-                                  Text('Please enter repeat password again'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: const Text('Ok'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          }
+                        } else {
+                          showDialog<void>(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('Password incorrect'),
+                                content: SingleChildScrollView(
+                                  child: ListBody(
+                                    children: const <Widget>[
+                                      Text(
+                                          'Password and repeat password do not match.'),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                          'Please enter repeat password again'),
+                                    ],
+                                  ),
+                                ),
+                                actions: <Widget>[
+                                  TextButton(
+                                    child: const Text('Ok'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
                                 ],
-                              ),
-                            ),
-                            actions: <Widget>[
-                              TextButton(
-                                child: const Text('Ok'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
+                              );
+                            },
                           );
-                        },
-                      );
-                    }
-                  }
-                },
-                child: const Text("Create account")),
+                        }
+                      }
+                      setState(() {
+                        isLoading = false;
+                      });
+                    },
+                    child: const Text("Create account")),
           )
         ],
       ),

@@ -18,6 +18,8 @@ class _SignInState extends State<SignIn> {
   final formKey = GlobalKey<FormState>();
   String name = "";
 
+  bool isLoading = false;
+
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -178,70 +180,56 @@ class _SignInState extends State<SignIn> {
                                   },
                                   controller: passwordController,
                                 )))),
-                    SizedBox(
-                      height: height * 0.10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 8, horizontal: 40),
-                            child: TextButton(
-                                onPressed: () {
-                                  Navigator.pushNamed(context, '/SignUp');
-                                },
-                                child: const Text("Create account"))),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 8, horizontal: 40),
-                          child: ElevatedButton(
-                              onPressed: () async {
-                                final navigator = Navigator.of(context);
-                                if (formKey.currentState!.validate()) {
-                                  GetUserJsonModel data =
-                                      await getUser(emailController.text);
-                                  if (data.document.id != 'Error' ||
-                                      data.document.id != 'Empty') {
-                                    if (data.document.email ==
-                                        emailController.text) {
-                                      if (data.document.password ==
-                                          passwordController.text) {
-                                            emailController.text = '';
-                                            passwordController.text = '';
-                                        if(data.document.acctype == 'Passenger') {
+                  ],
+                )),
+          ),
+        ),
+        bottomNavigationBar: Container(
+          height: 140,
+          alignment: Alignment.bottomCenter,
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 40),
+                      child: TextButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/SignUp');
+                          },
+                          child: const Text("Create account"))),
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 40),
+                    child: isLoading
+                        ? const CircularProgressIndicator()
+                        : ElevatedButton(
+                            onPressed: () async {
+                              setState(() {
+                                isLoading = true;
+                              });
 
-                                        } else if (data.document.acctype == 'Owner') {
-                                          var ownerPage = Owner(data: data);
-                                          navigator.push(MaterialPageRoute(builder: (context) => ownerPage));
-                                        }
-                                      } else {
-                                        showDialog<void>(
-                                          context: context,
-                                          barrierDismissible: false,
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              title: const Text(
-                                                  'Incorrect password'),
-                                              content: SingleChildScrollView(
-                                                child: ListBody(
-                                                  children: const <Widget>[
-                                                    Text(
-                                                        'Please enter correct password'),
-                                                  ],
-                                                ),
-                                              ),
-                                              actions: <Widget>[
-                                                TextButton(
-                                                  child: const Text('Ok'),
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                ),
-                                              ],
-                                            );
-                                          },
-                                        );
+                              final navigator = Navigator.of(context);
+                              if (formKey.currentState!.validate()) {
+                                GetUserJsonModel data =
+                                    await getUser(emailController.text);
+                                if (data.document.id != 'Error' ||
+                                    data.document.id != 'Empty') {
+                                  if (data.document.email ==
+                                      emailController.text) {
+                                    if (data.document.password ==
+                                        passwordController.text) {
+                                      emailController.text = '';
+                                      passwordController.text = '';
+                                      if (data.document.acctype ==
+                                          'Passenger') {
+                                      } else if (data.document.acctype ==
+                                          'Owner') {
+                                        var ownerPage = Owner(data: data);
+                                        navigator.push(MaterialPageRoute(
+                                            builder: (context) => ownerPage));
                                       }
                                     } else {
                                       showDialog<void>(
@@ -249,13 +237,13 @@ class _SignInState extends State<SignIn> {
                                         barrierDismissible: false,
                                         builder: (BuildContext context) {
                                           return AlertDialog(
-                                            title:
-                                                const Text('Incorrect email'),
+                                            title: const Text(
+                                                'Incorrect password'),
                                             content: SingleChildScrollView(
                                               child: ListBody(
                                                 children: const <Widget>[
                                                   Text(
-                                                      'Please enter correct email'),
+                                                      'Please enter correct password'),
                                                 ],
                                               ),
                                             ),
@@ -271,19 +259,18 @@ class _SignInState extends State<SignIn> {
                                         },
                                       );
                                     }
-                                  } else if (data.document.id == 'Empty') {
+                                  } else {
                                     showDialog<void>(
                                       context: context,
                                       barrierDismissible: false,
                                       builder: (BuildContext context) {
                                         return AlertDialog(
-                                          title:
-                                              const Text('Account not found'),
+                                          title: const Text('Incorrect email'),
                                           content: SingleChildScrollView(
                                             child: ListBody(
                                               children: const <Widget>[
                                                 Text(
-                                                    'Please enter valid email'),
+                                                    'Please enter correct email'),
                                               ],
                                             ),
                                           ),
@@ -299,32 +286,60 @@ class _SignInState extends State<SignIn> {
                                       },
                                     );
                                   }
+                                } else if (data.document.id == 'Empty') {
+                                  showDialog<void>(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: const Text('Account not found'),
+                                        content: SingleChildScrollView(
+                                          child: ListBody(
+                                            children: const <Widget>[
+                                              Text('Please enter valid email'),
+                                            ],
+                                          ),
+                                        ),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            child: const Text('Ok'),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
                                 }
-                              },
-                              child: const Text("Sign in")),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: height * 0.02,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "Forgot your password?",
-                          style: TextStyle(fontSize: 12),
-                        ),
-                        TextButton(
-                            onPressed: () {},
-                            child: const Text(
-                              "recover password",
-                              style: TextStyle(fontSize: 12),
-                            ))
-                      ],
-                    )
-                  ],
-                )),
+                              }
+                              setState(() {
+                                isLoading = false;
+                              });
+                            },
+                            child: const Text("Sign in")),
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 4,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "Forgot your password?",
+                    style: TextStyle(fontSize: 12),
+                  ),
+                  TextButton(
+                      onPressed: () {},
+                      child: const Text(
+                        "recover password",
+                        style: TextStyle(fontSize: 12),
+                      ))
+                ],
+              )
+            ],
           ),
         ));
   }

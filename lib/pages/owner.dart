@@ -40,12 +40,43 @@ class _OwnerState extends State<Owner> {
                         const EdgeInsets.symmetric(vertical: 0, horizontal: 36),
                     child: TextButton(
                         onPressed: () {
-                          Navigator.of(context).pop();
-                        }, child: const Text('Sign out')),
+                          showDialog<void>(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('Sign out'),
+                                content: SingleChildScrollView(
+                                  child: ListBody(children: const <Widget>[
+                                    Text('Are you sure you want to sign out?'),
+                                  ]),
+                                ),
+                                actions: <Widget>[
+                                  TextButton(
+                                    child: const Text('Ok'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                  TextButton(
+                                    child: const Text('Cancel'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        child: const Text('Sign out')),
                   )
                 ],
               ),
-              const SizedBox(height: 16,),
+              const SizedBox(
+                height: 16,
+              ),
               const BusItemCards()
             ],
           ),
@@ -57,11 +88,13 @@ class _OwnerState extends State<Owner> {
               padding: const EdgeInsets.only(right: 28, bottom: 28),
               child: FloatingActionButton(
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => AddNewBus(ownerEmail: widget.data.document.email!)));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AddNewBus(
+                                ownerEmail: widget.data.document.email!)));
                   },
-                  child: const Icon(
-                    Icons.add
-                  )),
+                  child: const Icon(Icons.add)),
             )
           ],
         ));
