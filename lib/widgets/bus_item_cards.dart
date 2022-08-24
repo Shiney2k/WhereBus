@@ -2,7 +2,8 @@ import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wherebus/tools/get_bus_controller.dart';
-import 'package:wherebus/tools/get_bus_json_model.dart' as getBusJsonModelPackage;
+import 'package:wherebus/tools/get_bus_json_model.dart'
+    as getBusJsonModelPackage;
 import 'package:wherebus/tools/get_user_json_model.dart';
 import 'package:wherebus/widgets/big_text.dart';
 import 'package:wherebus/widgets/small_text.dart';
@@ -44,24 +45,34 @@ class _BusItemCardsState extends State<BusItemCards> {
     return Column(
       children: [
         GetBuilder<GetBusController>(builder: (getBusController) {
-          return Container(
-            // color: Colors.deepOrange,
-            height: 200,
-            child: PageView.builder(
-                controller: pageController,
-                scrollDirection: Axis.horizontal,
-                itemCount: getBusController.allBusesList.isEmpty?1:getBusController.allBusesList.length,
-                itemBuilder: (context, position) {
-                  return _buildPageItem(position, getBusController.allBusesList[position]);
-                }),
-          );
+          return getBusController.isLoaded
+              ? Container(
+                  // color: Colors.deepOrange,
+                  height: 200,
+                  child: PageView.builder(
+                      controller: pageController,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: getBusController.allBusesList.length,
+                      itemBuilder: (context, position) {
+                        return _buildPageItem(
+                            position, getBusController.allBusesList[position]);
+                      }),
+                )
+              : Container(
+                  height: 200,
+                  child: const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
         }),
         const SizedBox(
           height: 14,
         ),
         GetBuilder<GetBusController>(builder: (getBusController) {
           return DotsIndicator(
-            dotsCount: getBusController.allBusesList.isEmpty?1:getBusController.allBusesList.length,
+            dotsCount: getBusController.allBusesList.isEmpty
+                ? 1
+                : getBusController.allBusesList.length,
             position: _currPageValue,
             decorator: DotsDecorator(
                 size: const Size.square(9.0),
@@ -106,7 +117,6 @@ class _BusItemCardsState extends State<BusItemCards> {
               borderRadius: BorderRadius.circular(30),
               color: index.isEven ? Colors.blue : Colors.cyan,
             ),
-            height: 100,
             margin: const EdgeInsets.only(left: 5, right: 5),
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 24),

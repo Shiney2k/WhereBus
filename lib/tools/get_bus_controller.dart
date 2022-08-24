@@ -11,6 +11,9 @@ class GetBusController extends GetxController {
   GetBusController({required this.email});
 
   String email;
+  bool _isLoaded = false;
+  bool get isLoaded => _isLoaded;
+
 
   var url = Uri.parse('${MONGODB_URL_BASE}action/find');
 
@@ -53,6 +56,7 @@ class GetBusController extends GetxController {
     _allBusesList.addAll(busesList.documents);
     // print('Got Data Successfully');
     // print(_allBusesList);
+    _isLoaded = true;
     update();
     // print('Number of Buses = ${_allBusesList.length}');
     // print('Number of Buses = ${_allBusesList.first.busType}');
