@@ -54,7 +54,7 @@ class _OwnerState extends State<Owner> {
               padding: const EdgeInsets.only(right: 28, bottom: 28),
               child: FloatingActionButton(
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const AddNewBus()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AddNewBus(ownerEmail: widget.data.document.email!)));
                   },
                   child: const Icon(
                     Icons.add

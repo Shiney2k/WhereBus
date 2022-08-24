@@ -1,7 +1,16 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:wherebus/tools/post_bus_json_model.dart';
+
+import '../auth/secrets.dart';
 
 class AddNewBus extends StatefulWidget {
-  const AddNewBus({Key? key}) : super(key: key);
+  const AddNewBus({Key? key,
+  required this.ownerEmail
+  }) : super(key: key);
+  final String ownerEmail;
 
   @override
   State<AddNewBus> createState() => _AddNewBusState();
@@ -23,6 +32,72 @@ class _AddNewBusState extends State<AddNewBus> {
     busNumberOfSeatsController.dispose();
     busDriverContactController.dispose();
     super.dispose();
+  }
+
+  var url = Uri.parse(MONGODB_URL_BASE + 'action/insertOne');
+
+  Future<PostBusJsonModel> submitNewBus(
+      String owner,
+      String busRegNo,
+      String busNumberOfSeats,
+      String busDriverContact,
+      String busType,
+      String bookable) async {
+    HttpClient httpClient = HttpClient();
+    HttpClientRequest request = await httpClient.postUrl(url);
+    request.headers.set('Content-Type', 'application/json');
+    request.headers.set('api-key', MONGODB_API_KEY);
+    request.add(utf8.encode(json.encode({
+      'dataSource': 'Cluster0',
+      'database': 'WhereBus',
+      'collection': 'buses',
+      'document': {
+        'owner': owner,
+        'busRegNo': busRegNo,
+        'busNumberOfSeats': busNumberOfSeats,
+        'busDriverContact': busDriverContact,
+        'busType': busType,
+        'bookable': bookable
+      }
+    })));
+    HttpClientResponse response = await request.close();
+    String reply = await response.transform(utf8.decoder).join();
+    // var jsonReply = json.decode(reply);
+    httpClient.close();
+
+    if (response.statusCode == 201) {
+      return postBusJsonModelFromJson(reply);
+    } else {
+      showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Error ${response.statusCode}'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: const <Widget>[
+                  Text('Could not submit data'),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Text('Please try again later'),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Ok'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+      return postBusJsonModelFromJson('Error');
+    }
   }
 
   @override
@@ -205,8 +280,47 @@ class _AddNewBusState extends State<AddNewBus> {
                   child: const Text("Cancel"))),
           Padding(
               padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 40),
-              child:
-                  ElevatedButton(onPressed: () {}, child: const Text('Save'))),
+              child: ElevatedButton(
+                  onPressed: () async {
+                    if (formKey.currentState!.validate()) {
+                      PostBusJsonModel data = await submitNewBus(
+                          widget.ownerEmail,
+                          busRegNoController.text,
+                          busNumberOfSeatsController.text,
+                          busDriverContactController.text,
+                          busType,
+                          bookable);
+
+                      if (data.insertedId != 'Error') {
+                        showDialog<void>(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Saved successfully'),
+                              content: SingleChildScrollView(
+                                child: ListBody(
+                                  children: const <Widget>[
+                                    Text('New bus saved successfully'),
+                                  ],
+                                ),
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: const Text('Ok'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
+                    }
+                  },
+                  child: const Text('Save'))),
         ],
       ),
     );
