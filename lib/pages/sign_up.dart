@@ -326,14 +326,14 @@ class _SignUpState extends State<SignUp> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 40),
+              padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 40),
               child: TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
                   child: const Text("Cancel"))),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 40),
+            padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 40),
             child: isLoading
                 ? const CircularProgressIndicator()
                 : ElevatedButton(

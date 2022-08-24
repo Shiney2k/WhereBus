@@ -7,9 +7,7 @@ import 'package:wherebus/tools/post_bus_json_model.dart';
 import '../auth/secrets.dart';
 
 class AddNewBus extends StatefulWidget {
-  const AddNewBus({Key? key,
-  required this.ownerEmail
-  }) : super(key: key);
+  const AddNewBus({Key? key, required this.ownerEmail}) : super(key: key);
   final String ownerEmail;
 
   @override
@@ -18,6 +16,8 @@ class AddNewBus extends StatefulWidget {
 
 class _AddNewBusState extends State<AddNewBus> {
   final formKey = GlobalKey<FormState>();
+
+  bool isLoading = false;
 
   final busRegNoController = TextEditingController();
   final busNumberOfSeatsController = TextEditingController();
@@ -272,55 +272,63 @@ class _AddNewBusState extends State<AddNewBus> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 40),
+              padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 40),
               child: TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
                   child: const Text("Cancel"))),
           Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 40),
-              child: ElevatedButton(
-                  onPressed: () async {
-                    if (formKey.currentState!.validate()) {
-                      PostBusJsonModel data = await submitNewBus(
-                          widget.ownerEmail,
-                          busRegNoController.text,
-                          busNumberOfSeatsController.text,
-                          busDriverContactController.text,
-                          busType,
-                          bookable);
+              padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 40),
+              child: isLoading
+                  ? const CircularProgressIndicator()
+                  : ElevatedButton(
+                      onPressed: () async {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        if (formKey.currentState!.validate()) {
+                          PostBusJsonModel data = await submitNewBus(
+                              widget.ownerEmail,
+                              busRegNoController.text,
+                              busNumberOfSeatsController.text,
+                              busDriverContactController.text,
+                              busType,
+                              bookable);
 
-                      if (data.insertedId != 'Error') {
-                        showDialog<void>(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text('Saved successfully'),
-                              content: SingleChildScrollView(
-                                child: ListBody(
-                                  children: const <Widget>[
-                                    Text('New bus saved successfully'),
+                          if (data.insertedId != 'Error') {
+                            showDialog<void>(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('Saved successfully'),
+                                  content: SingleChildScrollView(
+                                    child: ListBody(
+                                      children: const <Widget>[
+                                        Text('New bus saved successfully'),
+                                      ],
+                                    ),
+                                  ),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: const Text('Ok'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                        Navigator.pop(context);
+                                      },
+                                    ),
                                   ],
-                                ),
-                              ),
-                              actions: <Widget>[
-                                TextButton(
-                                  child: const Text('Ok'),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ],
+                                );
+                              },
                             );
-                          },
-                        );
-                      }
-                    }
-                  },
-                  child: const Text('Save'))),
+                          }
+                        }
+                        setState(() {
+                          isLoading = false;
+                        });
+                      },
+                      child: const Text('Save'))),
         ],
       ),
     );
