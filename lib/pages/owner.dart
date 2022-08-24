@@ -45,7 +45,7 @@ class _OwnerState extends State<Owner> {
                             barrierDismissible: false,
                             builder: (BuildContext context) {
                               return AlertDialog(
-                                title: Text('Sign out'),
+                                title: const Text('Sign out'),
                                 content: SingleChildScrollView(
                                   child: ListBody(children: const <Widget>[
                                     Text('Are you sure you want to sign out?'),
@@ -77,7 +77,9 @@ class _OwnerState extends State<Owner> {
               const SizedBox(
                 height: 16,
               ),
-              const BusItemCards()
+              BusItemCards(
+                data: widget.data,
+              )
             ],
           ),
         ),

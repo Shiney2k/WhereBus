@@ -1,10 +1,12 @@
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:wherebus/tools/get_user_json_model.dart';
 import 'package:wherebus/widgets/big_text.dart';
 import 'package:wherebus/widgets/small_text.dart';
 
 class BusItemCards extends StatefulWidget {
-  const BusItemCards({Key? key}) : super(key: key);
+  const BusItemCards({Key? key, required this.data}) : super(key: key);
+  final GetUserJsonModel data;
 
   @override
   State<BusItemCards> createState() => _BusItemCardsState();
