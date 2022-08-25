@@ -13,6 +13,16 @@ class Owner extends StatefulWidget {
 
 class _OwnerState extends State<Owner> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
 
