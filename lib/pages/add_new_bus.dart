@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:wherebus/tools/get_bus_controller.dart';
 import 'package:wherebus/tools/post_bus_json_model.dart';
 
 import '../auth/secrets.dart';
@@ -316,6 +318,7 @@ class _AddNewBusState extends State<AddNewBus> {
                                       onPressed: () {
                                         Navigator.of(context).pop();
                                         Navigator.pop(context);
+                                        Get.find<GetBusController>().getBusesList();
                                       },
                                     ),
                                   ],

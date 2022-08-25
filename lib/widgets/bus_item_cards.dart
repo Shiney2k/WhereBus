@@ -6,6 +6,7 @@ import 'package:wherebus/tools/get_bus_json_model.dart'
     as getBusJsonModelPackage;
 import 'package:wherebus/tools/get_user_json_model.dart';
 import 'package:wherebus/widgets/big_text.dart';
+// import 'package:wherebus/widgets/refresh_list_widget.dart';
 import 'package:wherebus/widgets/small_text.dart';
 
 class BusItemCards extends StatefulWidget {
@@ -40,6 +41,10 @@ class _BusItemCardsState extends State<BusItemCards> {
     pageController.dispose();
   }
 
+  // Future loadList() async {
+  //   Get.find<GetBusController>().getBusesList();
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -56,8 +61,8 @@ class _BusItemCardsState extends State<BusItemCards> {
                       itemBuilder: (context, position) {
                         return _buildPageItem(
                             position, getBusController.allBusesList[position]);
-                      }),
-                )
+                      }
+                      ))
               : Container(
                   height: 200,
                   child: const Center(
