@@ -87,9 +87,7 @@ class _OwnerState extends State<Owner> {
               const SizedBox(
                 height: 16,
               ),
-              BusItemCards(
-                data: widget.data,
-              )
+              BusItemCards(data: widget.data)
             ],
           ),
         ),

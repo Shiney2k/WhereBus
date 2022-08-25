@@ -34,6 +34,7 @@ class _BusItemCardsState extends State<BusItemCards> {
     Get.lazyPut(() => GetBusController(email: widget.data.document.email!));
     Get.find<GetBusController>().getBusesList();
     print('Got data from owner page to bus item cards');
+    print(widget.data.document.email);
   }
 
   @override
