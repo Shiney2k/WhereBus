@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:wherebus/pages/add_new_bus.dart';
 import 'package:wherebus/tools/get_user_json_model.dart';
 
+import '../ui_tools/OwnerNavBar.dart';
+
 class Owner extends StatefulWidget {
   const Owner({Key? key, required this.data}) : super(key: key);
   final GetUserJsonModel data;
@@ -16,6 +18,13 @@ class _OwnerState extends State<Owner> {
     final double height = MediaQuery.of(context).size.height;
 
     return Scaffold(
+        drawer: OwnerNavBar(widget.data),
+        appBar: AppBar(
+          title: Text('WhereBus'),
+          //centerTitle: true,
+          backgroundColor: Color.fromARGB(186, 6, 147, 172),
+          //automaticallyImplyLeading: false,
+        ),
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -40,7 +49,8 @@ class _OwnerState extends State<Owner> {
                     child: TextButton(
                         onPressed: () {
                           Navigator.of(context).pop();
-                        }, child: const Text('Sign out')),
+                        },
+                        child: const Text('Sign out')),
                   )
                 ],
               )
@@ -54,11 +64,12 @@ class _OwnerState extends State<Owner> {
               padding: const EdgeInsets.only(right: 28, bottom: 28),
               child: FloatingActionButton(
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const AddNewBus()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AddNewBus()));
                   },
-                  child: const Icon(
-                    Icons.add
-                  )),
+                  child: const Icon(Icons.add)),
             )
           ],
         ));
