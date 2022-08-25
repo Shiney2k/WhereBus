@@ -31,9 +31,10 @@ class _BusItemCardsState extends State<BusItemCards> {
         _currPageValue = pageController.page!;
       });
     });
+
     Get.lazyPut(() => GetBusController(email: widget.data.document.email!));
     Get.find<GetBusController>().getBusesList();
-    print('Got data from owner page to bus item cards');
+    print('Got data to bus item cards');
     print(widget.data.document.email);
   }
 
@@ -51,26 +52,28 @@ class _BusItemCardsState extends State<BusItemCards> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        GetBuilder<GetBusController>(builder: (getBusController) {
-          return getBusController.isLoaded
-              ? Container(
-                  // color: Colors.deepOrange,
-                  height: 200,
-                  child: PageView.builder(
-                      controller: pageController,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: getBusController.allBusesList.length,
-                      itemBuilder: (context, position) {
-                        return _buildPageItem(
-                            position, getBusController.allBusesList[position]);
-                      }))
-              : Container(
-                  height: 200,
-                  child: const Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                );
-        }),
+        GetBuilder<GetBusController>(
+          builder: (getBusController) {
+            return getBusController.isLoaded
+                ? Container(
+                    // color: Colors.deepOrange,
+                    height: 200,
+                    child: PageView.builder(
+                        controller: pageController,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: getBusController.allBusesList.length,
+                        itemBuilder: (context, position) {
+                          return _buildPageItem(position,
+                              getBusController.allBusesList[position]);
+                        }))
+                : Container(
+                    height: 200,
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+          }
+        ),
         const SizedBox(
           height: 14,
         ),
