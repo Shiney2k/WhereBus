@@ -2,13 +2,14 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:wherebus/pages/owner.dart';
+import 'package:wherebus/pages/passenger_home.dart';
 import 'package:wherebus/tools/get_user_json_model.dart';
 
 import '../auth/secrets.dart';
+import 'owner.dart';
 
 class SignIn extends StatefulWidget {
-  const SignIn({Key? key}) : super(key: key);
+  const SignIn({Key? key, required String title}) : super(key: key);
 
   @override
   State<SignIn> createState() => _SignInState();
@@ -225,6 +226,11 @@ class _SignInState extends State<SignIn> {
                                       passwordController.text = '';
                                       if (data.document.acctype ==
                                           'Passenger') {
+                                        var passengerHome =
+                                            passenger_home(data: data);
+                                        navigator.push(MaterialPageRoute(
+                                            builder: (context) =>
+                                                passengerHome));
                                       } else if (data.document.acctype ==
                                           'Owner') {
                                         var ownerPage = Owner(data: data);

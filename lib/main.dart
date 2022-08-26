@@ -16,10 +16,11 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'WhereBus',
-      home: const SignIn(),
-      routes: <String, WidgetBuilder> {
-      '/SignUp': (BuildContext context) => const SignUp(title: 'SignUp')
-    },
+      home: const SignIn(title: 'SignIn'),
+      routes: <String, WidgetBuilder>{
+        '/SignUp': (BuildContext context) => const SignUp(title: 'SignUp'),
+        '/SignIn': (BuildContext context) => const SignIn(title: 'SignIn'),
+      },
     );
   }
 }
