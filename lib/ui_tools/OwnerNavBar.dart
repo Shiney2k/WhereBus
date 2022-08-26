@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wherebus/tools/get_user_json_model.dart';
 
 class OwnerNavBar extends StatelessWidget {
-  const OwnerNavBar(this.data);
+  const OwnerNavBar({Key? key, required this.data}) : super(key: key);
   final GetUserJsonModel data;
   @override
   Widget build(BuildContext context) {

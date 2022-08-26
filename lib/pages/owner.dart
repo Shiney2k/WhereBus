@@ -28,7 +28,7 @@ class _OwnerState extends State<Owner> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-        drawer: OwnerNavBar(widget.data),
+        drawer: OwnerNavBar(data: widget.data),
         appBar: AppBar(
           title: const Text('WhereBus'),
           //centerTitle: true,
