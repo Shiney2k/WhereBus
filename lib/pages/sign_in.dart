@@ -2,13 +2,14 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:wherebus/pages/owner.dart';
+import 'package:wherebus/pages/passenger_home.dart';
 import 'package:wherebus/tools/get_user_json_model.dart';
 
 import '../auth/secrets.dart';
+import 'owner.dart';
 
 class SignIn extends StatefulWidget {
-  const SignIn({Key? key}) : super(key: key);
+  const SignIn({Key? key, required String title}) : super(key: key);
 
   @override
   State<SignIn> createState() => _SignInState();
@@ -30,13 +31,13 @@ class _SignInState extends State<SignIn> {
     super.dispose();
   }
 
-  var url = Uri.parse(MONGODB_URL_BASE + 'action/findOne');
+  var url = Uri.parse('${mongodburlbase}action/findOne');
 
   Future<GetUserJsonModel> getUser(String email) async {
     HttpClient httpClient = HttpClient();
     HttpClientRequest request = await httpClient.postUrl(url);
     request.headers.set('Content-Type', 'application/json');
-    request.headers.set('api-key', MONGODB_API_KEY);
+    request.headers.set('api-key', mongodbapikey);
     request.add(utf8.encode(json.encode({
       'dataSource': 'Cluster0',
       'database': 'WhereBus',
@@ -94,95 +95,90 @@ class _SignInState extends State<SignIn> {
     return Scaffold(
         key: scaffoldKey,
         body: SingleChildScrollView(
-          child: Container(
-            child: Form(
-                key: formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: height * 0.08,
+          child: Form(
+              key: formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: height * 0.08,
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 36),
+                    child: Text(
+                      "Welcome to",
+                      style: TextStyle(fontSize: 20, color: Colors.blue),
                     ),
-                    const Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 8, horizontal: 36),
-                      child: Text(
-                        "Welcome to",
-                        style: TextStyle(fontSize: 20, color: Colors.blue),
-                      ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 0, horizontal: 36),
+                    child: Text(
+                      "WhereBus",
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
                     ),
-                    const Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 0, horizontal: 36),
-                      child: Text(
-                        "WhereBus",
-                        style: TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.w600),
-                      ),
+                  ),
+                  SizedBox(
+                    height: height * 0.06,
+                  ),
+                  Center(
+                    child: Container(
+                      height: 200,
+                      width: 200,
+                      decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage("assets/images/wherebus.png"))),
                     ),
-                    SizedBox(
-                      height: height * 0.06,
-                    ),
-                    Center(
-                      child: Container(
-                        height: 200,
-                        width: 200,
-                        decoration: const BoxDecoration(
-                            image: DecorationImage(
-                                image:
-                                    AssetImage("assets/images/wherebus.png"))),
-                      ),
-                    ),
-                    SizedBox(
-                      height: height * 0.04,
-                    ),
-                    Center(
-                        child: SizedBox(
-                            width: 300,
-                            child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 16),
-                                child: TextFormField(
-                                  decoration: const InputDecoration(
-                                    border: UnderlineInputBorder(),
-                                    labelText: "Enter your email",
-                                  ),
-                                  validator: (value) {
-                                    if (value!.isEmpty ||
-                                        !RegExp(r'^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$')
-                                            .hasMatch(value)) {
-                                      return "Please enter valid email";
-                                    } else {
-                                      return null;
-                                    }
-                                  },
-                                  controller: emailController,
-                                )))),
-                    Center(
-                        child: SizedBox(
-                            width: 300,
-                            child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 16),
-                                child: TextFormField(
-                                  obscureText: true,
-                                  decoration: const InputDecoration(
-                                    border: UnderlineInputBorder(),
-                                    labelText: 'Enter password',
-                                  ),
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return "Please enter valid password";
-                                    } else {
-                                      return null;
-                                    }
-                                  },
-                                  controller: passwordController,
-                                )))),
-                  ],
-                )),
-          ),
+                  ),
+                  SizedBox(
+                    height: height * 0.04,
+                  ),
+                  Center(
+                      child: SizedBox(
+                          width: 300,
+                          child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 16),
+                              child: TextFormField(
+                                decoration: const InputDecoration(
+                                  border: UnderlineInputBorder(),
+                                  labelText: "Enter your email",
+                                ),
+                                validator: (value) {
+                                  if (value!.isEmpty ||
+                                      !RegExp(r'^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$')
+                                          .hasMatch(value)) {
+                                    return "Please enter valid email";
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                                controller: emailController,
+                              )))),
+                  Center(
+                      child: SizedBox(
+                          width: 300,
+                          child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 16),
+                              child: TextFormField(
+                                obscureText: true,
+                                decoration: const InputDecoration(
+                                  border: UnderlineInputBorder(),
+                                  labelText: 'Enter password',
+                                ),
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return "Please enter valid password";
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                                controller: passwordController,
+                              )))),
+                ],
+              )),
         ),
         bottomNavigationBar: Container(
           height: 140,
@@ -225,6 +221,11 @@ class _SignInState extends State<SignIn> {
                                       passwordController.text = '';
                                       if (data.document.acctype ==
                                           'Passenger') {
+                                        var passengerHome =
+                                            PassengerHome(data: data);
+                                        navigator.push(MaterialPageRoute(
+                                            builder: (context) =>
+                                                passengerHome));
                                       } else if (data.document.acctype ==
                                           'Owner') {
                                         var ownerPage = Owner(data: data);
