@@ -39,7 +39,7 @@ class _SignUpState extends State<SignUp> {
     super.dispose();
   }
 
-  var url = Uri.parse(MONGODB_URL_BASE + 'action/insertOne');
+  var url = Uri.parse('${mongodburlbase}action/insertOne');
 
   Future<PostUserJsonModel> submitNewUser(String fname, String lname,
       String email, String password, String phone, String accType) async {
@@ -70,7 +70,7 @@ class _SignUpState extends State<SignUp> {
     HttpClient httpClient = HttpClient();
     HttpClientRequest request = await httpClient.postUrl(url);
     request.headers.set('Content-Type', 'application/json');
-    request.headers.set('api-key', MONGODB_API_KEY);
+    request.headers.set('api-key', mongodbapikey);
     request.add(utf8.encode(json.encode({
       'dataSource': 'Cluster0',
       'database': 'WhereBus',
@@ -130,8 +130,7 @@ class _SignUpState extends State<SignUp> {
 
     return Scaffold(
       body: SingleChildScrollView(
-        child: Container(
-            child: Form(
+        child: Form(
           key: formKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -320,7 +319,7 @@ class _SignUpState extends State<SignUp> {
               ),
             ],
           ),
-        )),
+        ),
       ),
       bottomNavigationBar: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

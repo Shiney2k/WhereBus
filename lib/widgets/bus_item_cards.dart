@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wherebus/tools/get_bus_controller.dart';
 import 'package:wherebus/tools/get_bus_json_model.dart'
-    as getBusJsonModelPackage;
+    as get_bus_json_model_package;
 import 'package:wherebus/tools/get_user_json_model.dart';
 import 'package:wherebus/widgets/big_text.dart';
 import 'package:wherebus/widgets/small_text.dart';
@@ -46,7 +46,7 @@ class _BusItemCardsState extends State<BusItemCards> {
       children: [
         GetBuilder<GetBusController>(builder: (getBusController) {
           return getBusController.isLoaded
-              ? Container(
+              ? SizedBox(
                   // color: Colors.deepOrange,
                   height: 200,
                   child: PageView.builder(
@@ -58,9 +58,9 @@ class _BusItemCardsState extends State<BusItemCards> {
                             position, getBusController.allBusesList[position]);
                       }),
                 )
-              : Container(
+              : const SizedBox(
                   height: 200,
-                  child: const Center(
+                  child: Center(
                     child: CircularProgressIndicator(),
                   ),
                 );
@@ -87,7 +87,7 @@ class _BusItemCardsState extends State<BusItemCards> {
     );
   }
 
-  Widget _buildPageItem(int index, getBusJsonModelPackage.Document busItem) {
+  Widget _buildPageItem(int index, get_bus_json_model_package.Document busItem) {
     Matrix4 matrix = Matrix4.identity();
     if (index == _currPageValue.floor()) {
       var currScale = 1 - (_currPageValue - index) * (1 - _scaleFactor);

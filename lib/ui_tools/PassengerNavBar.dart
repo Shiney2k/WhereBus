@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wherebus/tools/get_user_json_model.dart';
 
 class PassengerNavBar extends StatelessWidget {
-  const PassengerNavBar(this.data);
+  const PassengerNavBar({Key? key, required this.data}) : super(key: key);
   final GetUserJsonModel data;
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class PassengerNavBar extends StatelessWidget {
         children: [
           UserAccountsDrawerHeader(
             accountName:
-                Text(data.document.fname! + '-' + data.document.acctype!),
+                Text('${data.document.fname!}-${data.document.acctype!}'),
             accountEmail: Text(data.document.email!),
             currentAccountPicture: CircleAvatar(
               child: ClipOval(
@@ -25,7 +25,7 @@ class PassengerNavBar extends StatelessWidget {
                 ),
               ),
             ),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.blue,
               image: DecorationImage(
                   fit: BoxFit.fill,
@@ -33,29 +33,29 @@ class PassengerNavBar extends StatelessWidget {
             ),
           ),
           ListTile(
-            leading: Icon(Icons.home),
-            title: Text('Home'),
-            onTap: () => null,
+            leading: const Icon(Icons.home),
+            title: const Text('Home'),
+            onTap: () {},
           ),
           ListTile(
-            leading: Icon(Icons.difference_outlined),
-            title: Text('Tickets'),
-            onTap: () => null,
+            leading: const Icon(Icons.difference_outlined),
+            title: const Text('Tickets'),
+            onTap: () {},
           ),
           ListTile(
-            leading: Icon(Icons.person),
-            title: Text('Account'),
-            onTap: () => null,
+            leading: const Icon(Icons.person),
+            title: const Text('Account'),
+            onTap: () {},
           ),
           ListTile(
-            leading: Icon(Icons.share),
-            title: Text('Share'),
-            onTap: () => null,
+            leading: const Icon(Icons.share),
+            title: const Text('Share'),
+            onTap: () {},
           ),
-          Divider(),
+          const Divider(),
           ListTile(
-            title: Text('Logout'),
-            leading: Icon(Icons.exit_to_app),
+            title: const Text('Logout'),
+            leading: const Icon(Icons.exit_to_app),
             //onTap: () => Navigator.pushNamed(context, '/SignIn'),
             onTap: () {
               showDialog<void>(

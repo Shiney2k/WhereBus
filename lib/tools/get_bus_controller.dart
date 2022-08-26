@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:get/get.dart';
 import 'package:wherebus/tools/get_bus_json_model.dart'
-    as getBusJsonModelPackage;
+    as get_bus_json_model;
 
 import '../auth/secrets.dart';
 
@@ -15,14 +15,14 @@ class GetBusController extends GetxController {
   bool get isLoaded => _isLoaded;
 
 
-  var url = Uri.parse('${MONGODB_URL_BASE}action/find');
+  var url = Uri.parse('${mongodburlbase}action/find');
 
-  Future<getBusJsonModelPackage.GetBusJsonModel> getBuses(
+  Future<get_bus_json_model.GetBusJsonModel> getBuses(
       String ownerEmail) async {
     HttpClient httpClient = HttpClient();
     HttpClientRequest request = await httpClient.postUrl(url);
     request.headers.set('Content-Type', 'application/json');
-    request.headers.set('api-key', MONGODB_API_KEY);
+    request.headers.set('api-key', mongodbapikey);
     request.add(utf8.encode(json.encode({
       'dataSource': 'Cluster0',
       'database': 'WhereBus',
@@ -36,9 +36,9 @@ class GetBusController extends GetxController {
     httpClient.close();
 
     if (response.statusCode == 200) {
-      return getBusJsonModelPackage.getBusJsonModelFromJson(reply);
+      return get_bus_json_model.getBusJsonModelFromJson(reply);
     } else {
-      return getBusJsonModelPackage
+      return get_bus_json_model
           .getBusJsonModelFromJson(json.encode(<String, dynamic>{
         'documents': [
           {'_id': 'Error'}
@@ -47,11 +47,11 @@ class GetBusController extends GetxController {
     }
   }
 
-  List<getBusJsonModelPackage.Document> _allBusesList = [];
-  List<getBusJsonModelPackage.Document> get allBusesList => _allBusesList;
+  List<get_bus_json_model.Document> _allBusesList = [];
+  List<get_bus_json_model.Document> get allBusesList => _allBusesList;
 
   Future<void> getBusesList() async {
-    getBusJsonModelPackage.GetBusJsonModel busesList = await getBuses(email);
+    get_bus_json_model.GetBusJsonModel busesList = await getBuses(email);
     _allBusesList = [];
     _allBusesList.addAll(busesList.documents);
     // print('Got Data Successfully');

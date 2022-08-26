@@ -34,7 +34,7 @@ class _AddNewBusState extends State<AddNewBus> {
     super.dispose();
   }
 
-  var url = Uri.parse(MONGODB_URL_BASE + 'action/insertOne');
+  var url = Uri.parse('${mongodburlbase}action/insertOne');
 
   Future<PostBusJsonModel> submitNewBus(
       String owner,
@@ -46,7 +46,7 @@ class _AddNewBusState extends State<AddNewBus> {
     HttpClient httpClient = HttpClient();
     HttpClientRequest request = await httpClient.postUrl(url);
     request.headers.set('Content-Type', 'application/json');
-    request.headers.set('api-key', MONGODB_API_KEY);
+    request.headers.set('api-key', mongodbapikey);
     request.add(utf8.encode(json.encode({
       'dataSource': 'Cluster0',
       'database': 'WhereBus',
@@ -106,8 +106,7 @@ class _AddNewBusState extends State<AddNewBus> {
 
     return Scaffold(
       body: SingleChildScrollView(
-          child: Container(
-              child: Form(
+          child: Form(
         key: formKey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -267,7 +266,7 @@ class _AddNewBusState extends State<AddNewBus> {
             ),
           ],
         ),
-      ))),
+      )),
       bottomNavigationBar: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

@@ -16,14 +16,13 @@ class Owner extends StatefulWidget {
 class _OwnerState extends State<Owner> {
   @override
   Widget build(BuildContext context) {
-    final double height = MediaQuery.of(context).size.height;
 
     return Scaffold(
         drawer: OwnerNavBar(widget.data),
         appBar: AppBar(
-          title: Text('WhereBus'),
+          title: const Text('WhereBus'),
           //centerTitle: true,
-          backgroundColor: Color.fromARGB(186, 6, 147, 172),
+          backgroundColor: const Color.fromARGB(186, 6, 147, 172),
           //automaticallyImplyLeading: false,
         ),
         body: SingleChildScrollView(
